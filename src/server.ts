@@ -33,10 +33,13 @@ const initDb = async ()=> {
 
 initDb()
 
+// root route
 app.get('/', (req : Request, res: Response) => {
   res.send('Hello Anayet')
 })
 
+
+// post user data 
 app.post('/api/users',async (req : Request, res: Response) => {
   const {name, email} = req.body;
 
@@ -55,6 +58,25 @@ app.post('/api/users',async (req : Request, res: Response) => {
       message : err.message,
     })
     
+  }
+})
+
+// get all user
+app.get('/api/users', async (req: Request, res: Response) => {
+  try {
+    const result = await pool.query(` SELECT * FROM users`);
+
+    console.log(result)
+
+    res.status(200).json({
+      success : true,
+      data : result.rows,
+    })
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    })
   }
 })
 
